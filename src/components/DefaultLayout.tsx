@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { ReactNode } from 'react';
+import 'semantic-ui-css/semantic.min.css'
 
 type DefaultLayoutProps = { children: ReactNode };
 
@@ -7,7 +8,7 @@ export const DefaultLayout = ({ children }: DefaultLayoutProps) => {
   return (
     <>
       <Head>
-        <title>Prisma Starter</title>
+        <title>Live Stock Tracking System</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

@@ -3,7 +3,9 @@ import { NextPageWithLayout } from './_app';
 import { inferProcedureInput } from '@trpc/server';
 import Link from 'next/link';
 import { Fragment } from 'react';
+import { Container } from 'semantic-ui-react'
 import type { AppRouter } from '~/server/routers/_app';
+import Table from '../components/Table'
 
 const IndexPage: NextPageWithLayout = () => {
   const utils = trpc.useContext();
@@ -33,23 +35,20 @@ const IndexPage: NextPageWithLayout = () => {
   //   }
   // }, [postsQuery.data, utils]);
 
+
   return (
-    <>
-      <h1>Welcome to your tRPC starter!</h1>
-      <p>
-        If you get stuck, check <a href="https://trpc.io">the docs</a>, write a
-        message in our <a href="https://trpc.io/discord">Discord-channel</a>, or
-        write a message in{' '}
-        <a href="https://github.com/trpc/trpc/discussions">
-          GitHub Discussions
-        </a>
-        .
-      </p>
+    <Container>
+      <h1>Welcome to Live Stock Monitoring System</h1>
+      <p> Total Active livestock:</p>
+      <h2>20</h2>
 
       <h2>
-        Latest Posts
+        All Livestock in the Database
         {postsQuery.status === 'loading' && '(loading)'}
       </h2>
+
+
+      <Table />
 
       <button
         onClick={() => postsQuery.fetchPreviousPage()}
@@ -63,6 +62,7 @@ const IndexPage: NextPageWithLayout = () => {
           ? 'Load More'
           : 'Nothing more to load'}
       </button>
+
 
       {postsQuery.data?.pages.map((page, index) => (
         <Fragment key={page.items[0]?.id || index}>
@@ -126,7 +126,7 @@ const IndexPage: NextPageWithLayout = () => {
           <p style={{ color: 'red' }}>{addPost.error.message}</p>
         )}
       </form>
-    </>
+    </ Container>
   );
 };
 
