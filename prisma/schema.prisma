@@ -11,17 +11,13 @@ generator client {
 }
 
 model Livestock {
-  id     String       @id @default(uuid())
-  ref_number   String
+  id            String       @id @default(uuid())
   description   String
-  siren   Boolean
-
-  // To return `Date`s intact through the API we need to add data transformers
-  // https://trpc.io/docs/data-transformers
-  createdAt DateTime @unique @default(now())
-  updatedAt DateTime @unique @default(now())
+  geo_coordinate    String
+  ring_bell     Boolean
+  created_at    DateTime @unique @default(now())
+  updated_at    DateTime @unique @default(now())
 }
-
 
 
 model Post {
