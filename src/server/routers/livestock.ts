@@ -4,12 +4,13 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { prisma } from '~/server/prisma';
 
-const default_select  = Prisma.validator<Prisma.LivestockSelect>()({
+const default_select = Prisma.validator<Prisma.LivestockSelect>()({
   id: true,
   description: true,
   ring_bell: true,
   created_at: true,
   updated_at: true,
+  geo_coordinate: true,
 });
 
 export const livestock_router = router({
@@ -57,21 +58,31 @@ export const livestock_router = router({
         nextCursor,
       };
     }),
-
-
   add: baseProcedure
     .input(
       z.object({
         id: z.string().uuid().optional(),
         description: z.string().min(1),
+        geo_coordinate: z.string().min(1),
         ring_bell: z.boolean(),
+        updated_at: z.date().optional(),
       }),
     )
-    .mutation(async ({ input }) => {
+    .mutation(async (input) => {
+      const { id } = input;
+      if (id) {
+        const livestock = await prisma.livestock.update({
+          where: { id },
+          data: input,
+          select: default_select,
+        });
+        return livestock;
+      }
+
       const livestock = await prisma.livestock.create({
         data: input,
         select: default_select,
       });
       return livestock;
     }),
-})
+});

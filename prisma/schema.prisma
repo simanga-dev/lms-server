@@ -11,12 +11,12 @@ generator client {
 }
 
 model Livestock {
-  id            String       @id @default(uuid())
-  description   String
-  geo_coordinate    String
-  ring_bell     Boolean
-  created_at    DateTime @unique @default(now())
-  updated_at    DateTime @unique @default(now())
+  id                String       @id @default(uuid())
+  description       String
+  geo_coordinate    String          @default("none")
+  ring_bell         Boolean         @default(false)
+  created_at        DateTime        @unique @default(now())
+  updated_at        DateTime        @unique @default(now())
 }
 
 
