@@ -68,7 +68,7 @@ export const livestock_router = router({
         updated_at: z.date().optional(),
       }),
     )
-    .mutation(async (input) => {
+    .mutation(async ({ input }) => {
       const { id } = input;
       if (id) {
         const livestock = await prisma.livestock.update({

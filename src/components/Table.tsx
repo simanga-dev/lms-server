@@ -1,14 +1,6 @@
 import { inferProcedureInput } from '@trpc/server';
 import React from 'react';
-import {
-  Icon,
-  Label,
-  Menu,
-  Table,
-  Header,
-  Rating,
-  Button,
-} from 'semantic-ui-react';
+import { Table, Button } from 'semantic-ui-react';
 import { AppRouter } from '~/server/routers/_app';
 import { trpc } from '~/utils/trpc';
 
@@ -40,7 +32,6 @@ const TableExamplePagination = () => {
       <Table.Body>
         {data?.items.map(
           ({ id, updated_at, description, ring_bell, geo_coordinate }) => {
-            console.log(ring_bell);
             return (
               <Table.Row key={id}>
                 <Table.Cell>{id}</Table.Cell>
