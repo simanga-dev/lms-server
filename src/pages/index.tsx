@@ -3,87 +3,84 @@ import { NextPageWithLayout } from './_app';
 import { inferProcedureInput } from '@trpc/server';
 import Link from 'next/link';
 import { Fragment } from 'react';
-import { Container } from 'semantic-ui-react';
+import { Container, Image, Dimmer, Loader, Segment, Message, Icon, Header } from 'semantic-ui-react';
 import type { AppRouter } from '~/server/routers/_app';
 import Table from '../components/Table';
 
+
+const square = { width: 175, height: 175 }
+
+
 const IndexPage: NextPageWithLayout = () => {
-  const utils = trpc.useContext();
+    const utils = trpc.useContext();
 
-  const { data, status } = trpc.livestock.list.useQuery({});
+    const { data, status } = trpc.livestock.list.useQuery({});
 
-  const add_livestock = trpc.livestock.add.useMutation({
-    async onSuccess() {
-      await utils.livestock.list.invalidate();
-    },
-  });
+    const add_livestock = trpc.livestock.add.useMutation({
+        async onSuccess() {
+            await utils.livestock.list.invalidate();
+        },
+    });
 
-  const handle_add_livestock = async () => {
-    type Input = inferProcedureInput<AppRouter['livestock']['add']>;
-    const input: Input = {
-      description: 'Wow, I am a animal that got added',
-      geo_coordinate: 'This is my live location',
-      ring_bell: true,
+    const handle_add_livestock = async () => {
+        type Input = inferProcedureInput<AppRouter['livestock']['add']>;
+        const input: Input = {
+            description: 'Wow, I am a animal that got added',
+            geo_coordinate: 'This is my live location',
+            ring_bell: false,
+        };
+        try {
+            await add_livestock.mutateAsync(input);
+        } catch (cause) {
+            console.error({ cause }, 'Failed to add post');
+        }
     };
-    try {
-      await add_livestock.mutateAsync(input);
-    } catch (cause) {
-      console.error({ cause }, 'Failed to add post');
+
+
+    if (status === 'loading')
+        <div style={{ height: '100vh', paddingTop: '20rem' }} >
+            <Loader active inline='centered' size='large'>Loading</Loader>
+        </div>
+
+
+    if (status === 'success') {
+        return (
+            <Container style={{ height: '100vh', paddingTop: '5rem' }} >
+                <h1 style={{ textAlign: 'center', paddingBottom: '2rem' }}>Welcome to Live Stock Monitoring System</h1>
+                <div>
+                    <Segment infor message circular style={square}>
+                        <Header as='h2'>
+                            Active
+                            <Header.Subheader>1</Header.Subheader>
+                        </Header>
+                    </Segment>
+
+                    <Segment circular inverted style={square}>
+                        <Header as='h2' inverted>
+                            Not Active
+                            <Header.Subheader>{data?.items.length}</Header.Subheader>
+                        </Header>
+                    </Segment>
+                </div>
+                <Table />
+                <hr />
+                <button onClick={handle_add_livestock}>Add Livestock</button>
+            </Container>
+        );
+
     }
-  };
 
-  // prefetch all posts for instant navigation
-  // useEffect(() => {
-  //   const allPosts = postsQuery.data?.pages.flatMap((page) => page.items) ?? [];
-  //   for (const { id } of allPosts) {
-  //     void utils.post.byId.prefetch({ id });
-  //   }
-  // }, [postsQuery.data, utils]);
 
-  return (
-    <Container>
-      <h1>Welcome to Live Stock Monitoring System</h1>
-      <p> Total Active livestock:</p>
-      <h2>{data?.items.length}</h2>
+    return (
+        <Container style={{ height: '100vh', paddingTop: '20rem' }} >
+            <Message warning>
+                <Icon name='warning' />
+                Something Went wrong
+            </Message>
 
-      <h2>
-        All Livestock in the Database
-        {status === 'loading' && '(loading)'}
-      </h2>
+        </Container>
+    )
 
-      <Table />
-
-      <button onClick={handle_add_livestock}>Add Livestock</button>
-
-      <hr />
-    </Container>
-  );
 };
 
 export default IndexPage;
-
-/**
- * If you want to statically render this page
- * - Export `appRouter` & `createContext` from [trpc].ts
- * - Make the `opts` object optional on `createContext()`
- *
- * @link https://trpc.io/docs/ssg
- */
-// export const getStaticProps = async (
-//   context: GetStaticPropsContext<{ filter: string }>,
-// ) => {
-//   const ssg = createProxySSGHelpers({
-//     router: appRouter,
-//     ctx: await createContext(),
-//   });
-//
-//   await ssg.post.all.fetch();
-//
-//   return {
-//     props: {
-//       trpcState: ssg.dehydrate(),
-//       filter: context.params?.filter ?? 'all',
-//     },
-//     revalidate: 1,
-//   };
-// };
