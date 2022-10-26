@@ -10,24 +10,19 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Livestock {
-  id                String       @id @default(uuid())
-  description       String
-  geo_coordinate    String          @default("none")
-  ring_bell         Boolean         @default(false)
-  created_at        DateTime        @unique @default(now())
-  updated_at        DateTime        @unique @default(now())
-}
 
-
-model Post {
-  id    String @id @default(uuid())
-  title String
-  text  String
-
-  // To return `Date`s intact through the API we use transformers
-  // https://trpc.io/docs/data-transformers
-  // This is unique so it can be used for cursor-based pagination
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+model livestock {
+  id                    String          @id @default(uuid())
+  distribution          String
+  comments              String
+  characteristics 	    String
+  name                  String
+  type_of_wool          String
+  Latitude              Float
+  Longitude             Float
+  temperature           Float
+  ring_bell             Boolean         @default(false)
+  created_at            DateTime        @default(now())
+  motion_update_at      DateTime        @default(now())
+  out_of_range          Boolean         @default(false)
 }

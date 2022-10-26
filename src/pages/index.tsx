@@ -48,7 +48,7 @@ const IndexPage: NextPageWithLayout = () => {
             <Container style={{ height: '100vh', paddingTop: '5rem' }} >
                 <h1 style={{ textAlign: 'center', paddingBottom: '2rem' }}>Welcome to Live Stock Monitoring System</h1>
                 <div>
-                    <Segment infor message circular style={square}>
+                    <Segment circular style={square}>
                         <Header as='h2'>
                             Active
                             <Header.Subheader>1</Header.Subheader>
@@ -62,12 +62,11 @@ const IndexPage: NextPageWithLayout = () => {
                         </Header>
                     </Segment>
                 </div>
-                <Table />
+                <Table data={data} />
                 <hr />
                 <button onClick={handle_add_livestock}>Add Livestock</button>
             </Container>
         );
-
     }
 
 

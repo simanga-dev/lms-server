@@ -4,13 +4,20 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { prisma } from '~/server/prisma';
 
-const default_select = Prisma.validator<Prisma.LivestockSelect>()({
-  id: true,
-  description: true,
-  ring_bell: true,
-  created_at: true,
-  updated_at: true,
-  geo_coordinate: true,
+const default_select = Prisma.validator<Prisma.livestockSelect>()({
+    id: true,
+    distribution: true,
+    comments: true,
+    characteristics: true,
+    name: true,
+    type_of_wool: true,
+    Latitude: true,
+    Longitude: true,
+    temperature: true,
+    ring_bell: true,
+    created_at: true,
+    motion_update_at: true,
+    out_of_range: true
 });
 
 export const livestock_router = router({
