@@ -23,16 +23,6 @@ const default_select = Prisma.validator<Prisma.livestockSelect>()({
 
 const sheep = [
     {
-        distribution: "originally Scotland, now also U.S., Italy, Argentina",
-        comments: "stylish appearance",
-        characteristics: "black or mottled, horned",
-        name: "Black-Faced Highland ram. Black-Faced Highland, also called Scottish Blackface",
-        type_of_wool: "carpet",
-        Latitude: 33.95734974,
-        Longitude: 13.95734974,
-        temperature: 24.753
-    },
-    {
         distribution: "developed in U.S. since 1912 ",
         comments: "high wool yield; mutton acceptable",
         characteristics: "large, white-faced, hornless ",

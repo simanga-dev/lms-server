@@ -35,6 +35,11 @@ const LivestockTable = ({ data }: PropsType) => {
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell singleLine> unique identifier</Table.HeaderCell>
+                        <Table.HeaderCell singleLine>Name</Table.HeaderCell>
+                        <Table.HeaderCell singleLine>Active</Table.HeaderCell>
+                        <Table.HeaderCell singleLine>Motion Update At</Table.HeaderCell>
+                        <Table.HeaderCell singleLine>Cordinate</Table.HeaderCell>
+                        <Table.HeaderCell singleLine>Ring a Bell</Table.HeaderCell>
                         <Table.HeaderCell singleLine>View</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
@@ -42,6 +47,10 @@ const LivestockTable = ({ data }: PropsType) => {
                     {data?.items.map((item) => (
                         <Table.Row key={item.id}>
                             <Table.Cell>{item.id}</Table.Cell>
+                            <Table.Cell>{item.name}</Table.Cell>
+                            <Table.Cell>yes / no </Table.Cell>
+                            <Table.Cell>{item.motion_update_at.toUTCString()}</Table.Cell>
+                            <Table.Cell>{item.Latitude}N {item.Longitude}L</Table.Cell>
                             <Table.Cell><a href="www.x.com">View Livestock </a></Table.Cell>
                         </Table.Row>)
                     )}
