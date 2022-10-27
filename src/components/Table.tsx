@@ -28,19 +28,32 @@ type PropsType = {
 
 const LivestockTable = ({ data }: PropsType) => {
 
+    const utils = trpc.useContext();
+
+    type Input = inferProcedureInput<AppRouter['livestock']['add']>;
+
+    const add_livestock = trpc.livestock.add.useMutation({
+        async onSuccess() {
+            await utils.livestock.list.invalidate();
+        },
+    });
+
+    // onClick={handle_ring_bell({ id, description, updated_at: Date.now(), ring_bell: !ring_bell })}>
+
+
     return (
         <>
             <h3> All Livestock in the Database </h3>
             <Table celled>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell singleLine> unique identifier</Table.HeaderCell>
-                        <Table.HeaderCell singleLine>Name</Table.HeaderCell>
-                        <Table.HeaderCell singleLine>Active</Table.HeaderCell>
-                        <Table.HeaderCell singleLine>Motion Update At</Table.HeaderCell>
-                        <Table.HeaderCell singleLine>Cordinate</Table.HeaderCell>
-                        <Table.HeaderCell singleLine>Ring a Bell</Table.HeaderCell>
-                        <Table.HeaderCell singleLine>View</Table.HeaderCell>
+                        <Table.HeaderCell width={3}> unique identifier</Table.HeaderCell>
+                        <Table.HeaderCell width={2} >Name</Table.HeaderCell>
+                        <Table.HeaderCell>Active</Table.HeaderCell>
+                        <Table.HeaderCell>Motion Update At</Table.HeaderCell>
+                        <Table.HeaderCell>Cordinate</Table.HeaderCell>
+                        <Table.HeaderCell>Ring a Bell</Table.HeaderCell>
+                        <Table.HeaderCell>View</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -51,6 +64,8 @@ const LivestockTable = ({ data }: PropsType) => {
                             <Table.Cell>yes / no </Table.Cell>
                             <Table.Cell>{item.motion_update_at.toUTCString()}</Table.Cell>
                             <Table.Cell>{item.Latitude}N {item.Longitude}L</Table.Cell>
+                            <Table.Cell><Button > Ring Bell </Button>
+                            </Table.Cell>
                             <Table.Cell><a href="www.x.com">View Livestock </a></Table.Cell>
                         </Table.Row>)
                     )}
