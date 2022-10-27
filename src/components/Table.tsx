@@ -1,8 +1,9 @@
 import { inferProcedureInput } from '@trpc/server';
+import Link from 'next/link';
 import React from 'react';
 import { Table, Button } from 'semantic-ui-react';
-import { AppRouter } from '~/server/routers/_app';
-import { trpc } from '~/utils/trpc';
+// import { AppRouter } from '~/server/routers/_app';
+// import { trpc } from '~/utils/trpc';
 
 
 type PropsType = {
@@ -28,17 +29,17 @@ type PropsType = {
 
 const LivestockTable = ({ data }: PropsType) => {
 
-    const utils = trpc.useContext();
-
-    type Input = inferProcedureInput<AppRouter['livestock']['add']>;
-
-    const add_livestock = trpc.livestock.add.useMutation({
-        async onSuccess() {
-            await utils.livestock.list.invalidate();
-        },
-    });
+    // const utils = trpc.useContext();
+    // type Input = inferProcedureInput<AppRouter['livestock']['add']>;
+    //
+    // const add_livestock = trpc.livestock.add.useMutation({
+    //     async onSuccess() {
+    //         await utils.livestock.list.invalidate();
+    //     },
+    // });
 
     // onClick={handle_ring_bell({ id, description, updated_at: Date.now(), ring_bell: !ring_bell })}>
+
 
 
     return (
@@ -47,7 +48,7 @@ const LivestockTable = ({ data }: PropsType) => {
             <Table celled>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell width={3}> unique identifier</Table.HeaderCell>
+                        <Table.HeaderCell width={1}> unique identifier</Table.HeaderCell>
                         <Table.HeaderCell width={2} >Name</Table.HeaderCell>
                         <Table.HeaderCell>Active</Table.HeaderCell>
                         <Table.HeaderCell>Motion Update At</Table.HeaderCell>
@@ -64,9 +65,8 @@ const LivestockTable = ({ data }: PropsType) => {
                             <Table.Cell>yes / no </Table.Cell>
                             <Table.Cell>{item.motion_update_at.toUTCString()}</Table.Cell>
                             <Table.Cell>{item.Latitude}N {item.Longitude}L</Table.Cell>
-                            <Table.Cell><Button > Ring Bell </Button>
-                            </Table.Cell>
-                            <Table.Cell><a href="www.x.com">View Livestock </a></Table.Cell>
+                            <Table.Cell><Button>Ring Bell</Button> </Table.Cell>
+                            <Table.Cell><Link href={`/livestock/${item.id}`}><a>View more</a></Link></Table.Cell>
                         </Table.Row>)
                     )}
                 </Table.Body>
