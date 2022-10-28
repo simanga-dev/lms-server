@@ -27,6 +27,24 @@ type PropsType = {
     } | undefined
 }
 
+function checkActive(date: Date): string {
+    const msInMinute = 60 * 1000;
+
+    const today = new Date()
+
+    const time_diff = Math.round(
+        Math.abs(today.getTime() - date.getTime()) / msInMinute
+    );
+
+    if (time_diff < 5)
+        return "Yes"
+
+    return "No"
+}
+
+
+
+
 const LivestockTable = ({ data }: PropsType) => {
 
     // const utils = trpc.useContext();
@@ -48,8 +66,8 @@ const LivestockTable = ({ data }: PropsType) => {
             <Table celled>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell width={1}> unique identifier</Table.HeaderCell>
-                        <Table.HeaderCell width={2} >Name</Table.HeaderCell>
+                        <Table.HeaderCell >Id</Table.HeaderCell>
+                        <Table.HeaderCell >Name</Table.HeaderCell>
                         <Table.HeaderCell>Active</Table.HeaderCell>
                         <Table.HeaderCell>Motion Update At</Table.HeaderCell>
                         <Table.HeaderCell>Cordinate</Table.HeaderCell>
@@ -58,16 +76,19 @@ const LivestockTable = ({ data }: PropsType) => {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {data?.items.map((item) => (
+                    {data?.items.map((item) =>  {
+                        // console.log(checkActive(item.motion_update_at))
+                     return (
                         <Table.Row key={item.id}>
                             <Table.Cell>{item.id}</Table.Cell>
                             <Table.Cell>{item.name}</Table.Cell>
-                            <Table.Cell>yes / no </Table.Cell>
+                            <Table.Cell>{checkActive(item.motion_update_at)} </Table.Cell>
                             <Table.Cell>{item.motion_update_at.toUTCString()}</Table.Cell>
                             <Table.Cell>{item.Latitude}N {item.Longitude}L</Table.Cell>
                             <Table.Cell><Button>Ring Bell</Button> </Table.Cell>
                             <Table.Cell><Link href={`/livestock/${item.id}`}><a>View more</a></Link></Table.Cell>
                         </Table.Row>)
+                     }
                     )}
                 </Table.Body>
             </Table>
