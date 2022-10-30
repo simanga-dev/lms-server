@@ -92,10 +92,16 @@ export const livestock_router = router({
         .input(
             z.object({
                 id: z.string().uuid().optional(),
-                description: z.string().min(1),
-                geo_coordinate: z.string().min(1),
+                distribution: z.string().min(1),
+                comments: z.string().min(1),
+                characteristics: z.string().min(1),
+                name: z.string().min(1),
+                type_of_wool: z.string().min(1),
+                Latitude: z.number(),
+                Longitude: z.number(),
+                temperature: z.number(),
                 ring_bell: z.boolean(),
-                updated_at: z.date().optional(),
+                motion_update_at: z.date().optional(),
             }),
         )
         .mutation(async ({ input }) => {

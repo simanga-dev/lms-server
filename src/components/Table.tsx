@@ -2,8 +2,8 @@ import { inferProcedureInput } from '@trpc/server';
 import Link from 'next/link';
 import React from 'react';
 import { Table, Button } from 'semantic-ui-react';
-// import { AppRouter } from '~/server/routers/_app';
-// import { trpc } from '~/utils/trpc';
+import { AppRouter } from '~/server/routers/_app';
+import { trpc } from '~/utils/trpc';
 
 
 type PropsType = {
@@ -47,18 +47,15 @@ function checkActive(date: Date): string {
 
 const LivestockTable = ({ data }: PropsType) => {
 
-    // const utils = trpc.useContext();
-    // type Input = inferProcedureInput<AppRouter['livestock']['add']>;
-    //
-    // const add_livestock = trpc.livestock.add.useMutation({
-    //     async onSuccess() {
-    //         await utils.livestock.list.invalidate();
-    //     },
-    // });
+    const utils = trpc.useContext();
 
-    // onClick={handle_ring_bell({ id, description, updated_at: Date.now(), ring_bell: !ring_bell })}>
+    type Input = inferProcedureInput<AppRouter['livestock']['add']>;
 
-
+    const add_livestock = trpc.livestock.add.useMutation({
+        async onSuccess() {
+            await utils.livestock.list.invalidate();
+        },
+    });
 
     return (
         <>
@@ -76,19 +73,31 @@ const LivestockTable = ({ data }: PropsType) => {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {data?.items.map((item) =>  {
+                    {data?.items.map((item) => {
                         // console.log(checkActive(item.motion_update_at))
-                     return (
-                        <Table.Row key={item.id}>
-                            <Table.Cell>{item.id}</Table.Cell>
-                            <Table.Cell>{item.name}</Table.Cell>
-                            <Table.Cell>{checkActive(item.motion_update_at)} </Table.Cell>
-                            <Table.Cell>{item.motion_update_at.toUTCString()}</Table.Cell>
-                            <Table.Cell>{item.Latitude}N {item.Longitude}L</Table.Cell>
-                            <Table.Cell><Button>Ring Bell</Button> </Table.Cell>
-                            <Table.Cell><Link href={`/livestock/${item.id}`}><a>View more</a></Link></Table.Cell>
-                        </Table.Row>)
-                     }
+                        return (
+                            <Table.Row key={item.id}>
+                                <Table.Cell>{item.id}</Table.Cell>
+                                <Table.Cell>{item.name}</Table.Cell>
+                                <Table.Cell>{checkActive(item.motion_update_at)} </Table.Cell>
+                                <Table.Cell>{item.motion_update_at.toUTCString()}</Table.Cell>
+                                <Table.Cell>{item.Latitude}N {item.Longitude}L</Table.Cell>
+                                <Table.Cell><Button
+                                    onClick={async () => {
+                                        try {
+                                            await add_livestock.mutateAsync({
+                                                ...item,
+                                                motion_update_at: new Date(),
+
+                                            });
+                                        } catch (cause) {
+                                            console.error({ cause }, 'Failed to add post');
+                                        }
+                                    }}
+                                >Ring Bell</Button> </Table.Cell>
+                                <Table.Cell><Link href={`/livestock/${item.id}`}><a>View more</a></Link></Table.Cell>
+                            </Table.Row>)
+                    }
                     )}
                 </Table.Body>
             </Table>
