@@ -73,17 +73,17 @@ export const livestock_router = router({
     )
     .query(async ({ input }) => {
       const { id } = input;
-      const post = await prisma.livestock.findUnique({
+      const livestock = await prisma.livestock.findUnique({
         where: { id },
         select: default_select,
       });
-      if (!post) {
+      if (!livestock) {
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: `No post with id '${id}'`,
         });
       }
-      return post;
+      return livestock;
     }),
   add: baseProcedure
     .input(
@@ -104,6 +104,7 @@ export const livestock_router = router({
     .mutation(async ({ input }) => {
       const { id } = input;
       if (id) {
+        input.motion_update_at = new Date()
         const livestock = await prisma.livestock.update({
           where: { id },
           data: input,

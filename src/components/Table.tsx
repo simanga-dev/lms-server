@@ -86,7 +86,7 @@ const LivestockTable = ({ data }: PropsType) => {
                       try {
                         await add_livestock.mutateAsync({
                           ...item,
-                          motion_update_at: new Date(),
+                          temperature: 23.2,
                         });
                       } catch (cause) {
                         console.error({ cause }, 'Failed to add post');
